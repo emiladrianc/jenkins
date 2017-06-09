@@ -7,7 +7,10 @@ node {
 		}
 		
 		stage ('Build'){
-			sh 'mvn clean compile'
+			withMaven(mavenOpts: MAVEN_OPTS, maven: 'M3', mavenLocalRepo: MAVEN_LOCAL_REPOSITORY, mavenSettingsConfig: 	MAVEN_SETTINGS) {
+				sh 'mvn clean compile'
+			}
+			
 		}
 
 		stage ('Run tests'){
