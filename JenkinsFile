@@ -1,0 +1,58 @@
+node {
+
+	try{
+
+		stage ('Check Out'){
+			checkout scm
+		}
+		
+		stage ('Build'){
+			bat 'mvn clean compile'
+		}
+
+		stage ('Run tests'){
+			bat 'mvn test'
+		}
+
+		stage ('Code coverage'){
+			bat 'mvn cobertura:cobertura'
+			publishHTML(target:[
+				allowMissing: false, 
+				alwaysLinkToLastBuild: true, 
+				keepAll: false, 
+				reportDir: 'target/site/cobertura/', 
+				reportFiles: 'index.html', 
+				reportName: 'UnitTests Report'])
+		}		
+				
+		stage('SonarQube analysis') {
+            withSonarQubeEnv('SonarQube Server') {            
+            bat 'mvn sonar:sonar'
+			}
+    	}
+		
+		stage('Change version'){
+			bat 'mvn versions:set'
+			bat 'mvn versions:commit'
+		}
+		
+		stage('Deploy artifact to nexus'){
+			bat 'mvn clean deploy'
+		}		
+		
+		notify('Success')
+	}
+	catch(err){
+		notify("Error ${err}")
+		currentBuild.result = 'FAILURE'
+	}
+}
+
+def notify(status){
+    emailext (
+      to: "emil.cristurean@accenture.com",
+      subject: "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+        <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+    )
+}

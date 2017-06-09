@@ -1,0 +1,93 @@
+pipeline {
+    agent any
+
+	options { 
+		buildDiscarder(logRotator(numToKeepStr: '5'))
+		timeout(time: 10, unit: 'MINUTES')
+		timestamps()
+		disableConcurrentBuilds()
+	}
+
+	triggers {
+		pollSCM('* * * * *')
+	}
+			
+    stages {
+		stage ('Check Out'){
+			steps {
+				checkout scm
+			}
+		}
+		
+		stage ('Build'){
+			steps {
+				bat 'mvn clean compile'
+			}
+		}
+
+		stage ('Run tests'){
+			steps {
+				bat 'mvn test'
+			}
+		}
+
+		stage ('Code coverage'){
+			steps {
+				bat 'mvn cobertura:cobertura'
+				publishHTML(target:[
+					allowMissing: false, 
+					alwaysLinkToLastBuild: true, 
+					keepAll: false, 
+					reportDir: 'target/site/cobertura/', 
+					reportFiles: 'index.html', 
+					reportName: 'UnitTests Report'])
+			}
+		}		
+		
+		
+		stage('SonarQube analysis') {
+			steps {
+				withSonarQubeEnv('SonarQube Server') {            
+					bat 'mvn sonar:sonar'
+				}
+			}
+    	}
+		
+		stage('Change version'){
+			steps {
+				bat 'mvn versions:set'
+				bat 'mvn versions:commit'
+			}
+		}
+		
+		stage('Deploy artifact to nexus'){
+			steps {			
+				bat 'mvn clean deploy'
+			}
+		}		
+    }
+	
+	post {
+		always {
+             echo 'Always....'
+		}
+		
+		success{
+			emailext (
+			  to: "emil.cristurean@accenture.com",
+			  subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+			  body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+				<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+			)
+		}
+		
+		failure {
+			emailext (
+			  to: "emil.cristurean@accenture.com",
+			  subject: "failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+			  body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+				<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
+			)
+		}
+	}
+}
