@@ -21,19 +21,19 @@ pipeline {
 		
 		stage ('Build'){
 			steps {
-				sh 'mvn clean compile'
+				bat 'mvn clean compile'
 			}
 		}
 
 		stage ('Run tests'){
 			steps {
-				sh 'mvn test'
+				bat 'mvn test'
 			}
 		}
 
 		stage ('Code coverage'){
 			steps {
-				sh 'mvn cobertura:cobertura'
+				bat 'mvn cobertura:cobertura'
 				publishHTML(target:[
 					allowMissing: false, 
 					alwaysLinkToLastBuild: true, 
@@ -48,21 +48,21 @@ pipeline {
 		stage('SonarQube analysis') {
 			steps {
 				withSonarQubeEnv('SonarQube Server') {            
-					sh 'mvn sonar:sonar'
+					bat 'mvn sonar:sonar'
 				}
 			}
     	}
 		
 		stage('Change version'){
 			steps {
-				sh 'mvn versions:set'
-				sh 'mvn versions:commit'
+				bat 'mvn versions:set'
+				bat 'mvn versions:commit'
 			}
 		}
 		
 		stage('Deploy artifact to nexus'){
 			steps {			
-				sh 'mvn clean deploy'
+				bat 'mvn clean deploy'
 			}
 		}		
     }
