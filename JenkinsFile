@@ -7,15 +7,15 @@ node {
 		}
 		
 		stage ('Build'){
-			bat 'mvn clean compile'
+			sh 'mvn clean compile'
 		}
 
 		stage ('Run tests'){
-			bat 'mvn test'
+			sh 'mvn test'
 		}
 
 		stage ('Code coverage'){
-			bat 'mvn cobertura:cobertura'
+			sh 'mvn cobertura:cobertura'
 			publishHTML(target:[
 				allowMissing: false, 
 				alwaysLinkToLastBuild: true, 
@@ -27,17 +27,17 @@ node {
 				
 		stage('SonarQube analysis') {
             withSonarQubeEnv('SonarQube Server') {            
-            bat 'mvn sonar:sonar'
+				sh 'mvn sonar:sonar'
 			}
     	}
 		
 		stage('Change version'){
-			bat 'mvn versions:set'
-			bat 'mvn versions:commit'
+			sh 'mvn versions:set'
+			sh 'mvn versions:commit'
 		}
 		
 		stage('Deploy artifact to nexus'){
-			bat 'mvn clean deploy'
+			sh 'mvn clean deploy'
 		}		
 		
 		notify('Success')
