@@ -7,40 +7,50 @@ node {
 		}
 		
 		stage ('Build'){
-			withMaven(mavenOpts: MAVEN_OPTS, maven: 'M3', mavenLocalRepo: MAVEN_LOCAL_REPOSITORY, mavenSettingsConfig: 	MAVEN_SETTINGS) {
+			withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
 				sh 'mvn clean compile'
 			}
 			
 		}
 
 		stage ('Run tests'){
-			sh 'mvn test'
+			withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
+				sh 'mvn test'
+			}
 		}
 
 		stage ('Code coverage'){
-			sh 'mvn cobertura:cobertura'
-			publishHTML(target:[
-				allowMissing: false, 
-				alwaysLinkToLastBuild: true, 
-				keepAll: false, 
-				reportDir: 'target/site/cobertura/', 
-				reportFiles: 'index.html', 
-				reportName: 'UnitTests Report'])
+			withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
+				sh 'mvn cobertura:cobertura'
+				publishHTML(target:[
+					allowMissing: false, 
+					alwaysLinkToLastBuild: true, 
+					keepAll: false, 
+					reportDir: 'target/site/cobertura/', 
+					reportFiles: 'index.html', 
+					reportName: 'UnitTests Report'])
+			}
 		}		
 				
 		stage('SonarQube analysis') {
-            withSonarQubeEnv('SonarQube Server') {            
-				sh 'mvn sonar:sonar'
+            withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
+				withSonarQubeEnv('SonarQube Server') {            
+					sh 'mvn sonar:sonar'
+				}
 			}
     	}
 		
 		stage('Change version'){
-			sh 'mvn versions:set'
-			sh 'mvn versions:commit'
+			withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
+				sh 'mvn versions:set'
+				sh 'mvn versions:commit'
+			}
 		}
 		
 		stage('Deploy artifact to nexus'){
-			sh 'mvn clean deploy'
+			withMaven(maven: 'M3', mavenLocalRepo: '.repository') {
+				sh 'mvn clean deploy'
+			}
 		}		
 		
 		notify('Success')
