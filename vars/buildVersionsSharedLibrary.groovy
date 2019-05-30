@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 def getBuildVersion(def project, def brand) {
     
     final HOCKEYAPP_CARE_APP_ID_MAP = ['myelectrolux-sprint' : 'cf116a138086435dbc04f1678b50cc6d',
