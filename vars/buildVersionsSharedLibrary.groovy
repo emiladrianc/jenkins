@@ -24,7 +24,7 @@ def getBuildVersion(def project, def brand) {
         }
     }
 
-    def BUILD_LIST = [ 'bash', '-c', "curl -H 'X-HockeyAppToken:f670dc1b1b05467ea48647bef0d31016' https://rink.hockeyapp.net/api/2/apps/3e1788b2e0c64d47ad85e37cbfb40918/app_versions.json | jq -r '[.app_versions[:5][].shortversion] | join(\", \")'"].execute().text
+    def BUILD_LIST = [ 'bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json | jq -r '[.app_versions[:5][].shortversion] | join(\", \")'"].execute().text
   
     return BUILD_LIST
 }
