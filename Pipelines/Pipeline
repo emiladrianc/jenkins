@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(defaultValue: true, description: '', name: 'userFlag')
+		choice(choices: ['AEG', 'Electrolux'], description: '', name: 'brand')
+		choice(choices: ['Staging', 'Preproduction', 'Production'], description: '', name: 'environment')
+    }
+
+    stages {
+        stage("foo") {
+            steps {
+                echo "flag: ${params.userFlag}"
+				
+				echo "brand: ${params.brand}"
+				
+				echo "environment: ${params.environment}"
+            }
+        }
+    }
+}

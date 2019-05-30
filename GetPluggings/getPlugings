@@ -1,0 +1,5 @@
+curl 'localhost:8081/jnlpJars/jenkins-cli.jar' > jenkins-cli.jar
+
+java -jar jenkins-cli.jar -s http://localhost:8081 groovy --username "admin" --password "admin" = < plugins.groovy > plugins.txt
+
+java -jar jenkins-cli.jar -s http://localhost:8081 groovy = < plugins.groovy > plugins.txt
