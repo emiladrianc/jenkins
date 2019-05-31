@@ -1,0 +1,70 @@
+@Library('buildVersionsSharedLibrary')_
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'PROJECT', choices: ['care', 'kitchen'], description: 'Choose Project type!')
+        choice(name: 'BRAND', choices: ['myelectrolux-staging', 'myaeg-staging'], description: 'Choose Brand!')
+        choice(name: 'TEST_SUITES', choices: ['careNavigationTests.xml', 'careSmokeTestsOutdoorWasher.xml'], description: 'Choose test suite!')
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+        timeout(time: 45, unit: 'MINUTES')
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+
+        stage('Test pick build version number') {
+            steps {
+                echo getBuildVersion("care", "myelectrolux-staging")
+                script {
+                    parameters{
+                        choice(name: 'BUILD_VERSION', choices: getBuildVersion(${PROJECT}, ${BRAND}), description: 'Choose build version')}
+                }
+                echo getBuildVersion(care, myelectrolux-staging)
+
+                echo "${params.PROJECT}"
+
+                echo "${params.BRAND}"
+
+                echo "${params.TEST_SUITES}"
+
+                echo "${params.BUILD_LIST}"
+            }
+        }
+
+        /*stage('Check out') {
+            steps {
+                checkout scm
+                sh 'git submodule update --init --recursive'
+                sh '''
+                    cd ./core-mobile-automation-framework
+                    mvn clean install
+                    '''
+            }
+        }
+
+        stage('Run Automated EMEA Care Navigation tests') {
+            steps {
+                 sh 'mvn clean test -DtestFile="${TestSuites}" -DappUnderTest="${Project}" -DrealTestDevice=Pixel -DloginUser=automation -DapkEnvironment="${Brand}" -f pom.xml'
+            }
+        }*/
+    }
+
+    post {
+        always {
+            deleteDir()
+        }
+
+        success {
+            echo 'Succes....'
+        }
+
+        failure {
+            echo 'Failure....'
+        }
+    }
+}
