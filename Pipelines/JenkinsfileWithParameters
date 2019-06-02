@@ -1,4 +1,6 @@
+#!groovy
 @Library('buildVersionsSharedLibrary')_
+
 pipeline {
     agent any
 
@@ -21,12 +23,11 @@ pipeline {
             steps {
                 echo getBuildVersion("care", "myelectrolux-staging")
                 script {
-                    def PROJECT = ${PROJECT}
-                    def BRAND = ${BRAND}
                     parameters{
-                        choice(name: 'BUILD_VERSION', choices: getBuildVersion(PROJECT, BRAND), description: 'Choose build version')}
+                        choice(name: 'BUILD_VERSION', choices: getBuildVersion(${params.PROJECT}, ${params.BRAND}), description: 'Choose build version')}
+                    def buildversions = getBuildVersion(care, myelectrolux-staging)
                 }
-                echo getBuildVersion(care, myelectrolux-staging)
+                echo buildversions
 
                 echo "${params.PROJECT}"
 
