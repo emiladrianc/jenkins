@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+// vars/buildVersionsSharedLibrary.groovy
 
 def getBuildVersion(def project, def brand) {
 

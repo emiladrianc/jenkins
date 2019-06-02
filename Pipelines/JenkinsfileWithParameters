@@ -1,5 +1,4 @@
-#!groovy
-@Library('buildVersionsSharedLibrary')_
+@Library('buildVersionsSharedLibrary') _
 
 pipeline {
     agent any
