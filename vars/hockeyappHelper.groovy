@@ -25,10 +25,15 @@ def getBuildVersion(def project, def brand) {
     }
 
 //    def BUILD_LIST = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json | jq -r '[.app_versions[:5][].shortversion] | join(\", \")'"].execute().text
-    def BUILD_LIST = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json | jq -r '.app_versions[:5][].shortversion'"].execute().text
-
-    def slurper = new JsonSlurper()
-    def json = slurper.parseText(BUILD_LIST)
-    def tags = new ArrayList()
-    return tags.addAll(json.tags).join('\n')
+    def cmd = ['bash', '-c', "curl -H 'X-HockeyAppToken:f670dc1b1b05467ea48647bef0d31016' https://rink.hockeyapp.net/api/2/apps/3e1788b2e0c64d47ad85e37cbfb40918/app_versions.json"]
+    def cmdJsonTextOutput = cmd.execute().text
+    JsonSlurper jsonSlurper = new JsonSlurper();
+    Object result = jsonSlurper.parseText(cmdJsonTextOutput);
+    def shortBuildVersions = new ArrayList()
+    result.app_versions.each { app ->
+        shortBuildVersions.add(app.shortversion)
+    }
+    return shortBuildVersions.join('\n')
 }
+
+
