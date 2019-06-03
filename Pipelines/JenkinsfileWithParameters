@@ -7,7 +7,9 @@ pipeline {
         choice(name: 'PROJECT', choices: ['care', 'kitchen'], description: 'Choose Project type!')
         choice(name: 'BRAND', choices: ['myelectrolux-staging', 'myaeg-staging'], description: 'Choose Brand!')
         choice(name: 'TEST_SUITES', choices: ['careNavigationTests.xml', 'careSmokeTestsOutdoorWasher.xml'], description: 'Choose test suite!')
+        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')
     }
+
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
@@ -20,10 +22,10 @@ pipeline {
 
         stage('Test pick build version number') {
             steps {
-                script {
-                   parameters{
-                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')}
-                }
+//                script {
+//                   parameters{
+//                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')}
+//                }
 
                 echo "${params.PROJECT}"
 
