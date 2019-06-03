@@ -20,7 +20,7 @@ pipeline {
 
         stage('Test pick build version number') {
             steps {
-                echo getBuildVersion("care", "myelectrolux-staging")
+//                echo getBuildVersion("care", "myelectrolux-staging")
                 script {
                     parameters{
                         choice(name: 'BUILD_VERSION', choices: buildVersionsSharedLibrary.getBuildVersion(${params.PROJECT}, ${params.BRAND}), description: 'Choose build version')}
