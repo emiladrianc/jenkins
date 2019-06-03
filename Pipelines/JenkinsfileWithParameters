@@ -7,7 +7,6 @@ pipeline {
         choice(name: 'PROJECT', choices: ['care', 'kitchen'], description: 'Choose Project type!')
         choice(name: 'BRAND', choices: ['myelectrolux-staging', 'myaeg-staging'], description: 'Choose Brand!')
         choice(name: 'TEST_SUITES', choices: ['careNavigationTests.xml', 'careSmokeTestsOutdoorWasher.xml'], description: 'Choose test suite!')
-        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')
     }
 
 
@@ -21,21 +20,35 @@ pipeline {
     stages {
 
         stage('Test pick build version number') {
+
             steps {
-//                script {
-//                   parameters{
-//                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')}
-//                }
-
-                echo "${params.PROJECT}"
-
-                echo "${params.BRAND}"
-
-                echo "${params.TEST_SUITES}"
-
-                echo "${params.BUILD_VERSION}"
+                timeout(time: 30, unit: 'SECONDS') {
+                    script {
+                        // Show the select input modal
+                        def INPUT_PARAMS = input message: 'Please provide build version', ok: 'Next',
+                                parameters: [
+                                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')]
+                    }
+                    env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
+                }
             }
+
+//        steps {
+//            script {
+//                parameters {
+//                    choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')
+//                }
+//            }
+
+            echo "${params.PROJECT}"
+
+            echo "${params.BRAND}"
+
+            echo "${params.TEST_SUITES}"
+
+            echo "${params.BUILD_VERSION}"
         }
+
 
         /*stage('Check out') {
             steps {
