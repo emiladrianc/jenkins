@@ -1,4 +1,5 @@
 #!/usr/bin/env groovy
+import groovy.json.JsonSlurper
 
 def getBuildVersion(def project, def brand) {
 
@@ -25,5 +26,8 @@ def getBuildVersion(def project, def brand) {
 
     def BUILD_LIST = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json | jq -r '[.app_versions[:5][].shortversion] | join(\", \")'"].execute().text
 
-    return BUILD_LIST
+    def slurper = new JsonSlurper()
+    def json = slurper.parseText(BUILD_LIST)
+    def tags = new ArrayList()
+    return tags.addAll(json.tags).join('\n')
 }
