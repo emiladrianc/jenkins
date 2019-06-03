@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     parameters{
-                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(${params.PROJECT}, ${params.BRAND}), description: 'Choose build version')}
+                        choice(name: 'BUILD_VERSION', choices: [hockeyappHelper.getBuildVersion(${params.PROJECT}, ${params.BRAND})], description: 'Choose build version')}
                 }
 
                 echo "${params.PROJECT}"
