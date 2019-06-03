@@ -31,7 +31,7 @@ pipeline {
 
                 echo "${params.TEST_SUITES}"
 
-                echo "${params.BUILD_LIST}"
+                echo "${params.BUILD_VERSION}"
             }
         }
 
