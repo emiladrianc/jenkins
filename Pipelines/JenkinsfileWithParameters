@@ -31,22 +31,16 @@ pipeline {
                         env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
                     }
                 }
+
+                echo "${params.PROJECT}"
+
+                echo "${params.BRAND}"
+
+                echo "${params.TEST_SUITES}"
+
+                echo "${params.BUILD_VERSION}"
             }
 
-//        steps {
-//            script {
-//                parameters {
-//                    choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')
-//                }
-//            }
-
-            echo "${params.PROJECT}"
-
-            echo "${params.BRAND}"
-
-            echo "${params.TEST_SUITES}"
-
-            echo "${params.BUILD_VERSION}"
         }
 
 
