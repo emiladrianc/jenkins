@@ -21,7 +21,7 @@ pipeline {
         stage('Test pick build version number') {
             steps {
                 script {
-                    parameters{
+                    input message: 'Please provide build version', ok: 'Next', parameters{
                         choice(name: 'BUILD_VERSION', choices: [hockeyappHelper.getBuildVersion(${params.PROJECT}, ${params.BRAND})], description: 'Choose build version')}
                 }
 
