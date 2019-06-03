@@ -20,13 +20,10 @@ pipeline {
 
         stage('Test pick build version number') {
             steps {
-//                echo getBuildVersion("care", "myelectrolux-staging")
-                script {
-                    parameters{
-                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(${PROJECT}, ${BRAND}), description: 'Choose build version')}
-                    def buildversions = getBuildVersion(care, myelectrolux-staging)
-                }
-                echo buildversions
+//                script {
+//                    parameters{
+//                        choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(${PROJECT}, ${BRAND}), description: 'Choose build version')}
+//                }
 
                 echo "${params.PROJECT}"
 
