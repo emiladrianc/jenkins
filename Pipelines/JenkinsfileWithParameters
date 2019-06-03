@@ -25,10 +25,10 @@ pipeline {
                 timeout(time: 30, unit: 'SECONDS') {
                     script {
                         // Show the select input modal
-                        def INPUT_PARAMS = input message: 'Please provide build version', ok: 'Next',
+                        input message: 'Please provide build version', ok: 'Next',
                                 parameters: [
                                         choice(name: 'BUILD_VERSION', choices: hockeyappHelper.getBuildVersion(), description: 'Choose build version')]
-                        env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
+//                        env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
                     }
                 }
 
