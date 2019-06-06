@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
-def getBuildVersion() {
+def getBuildVersion(def project, def brand) {
 
     final HOCKEYAPP_CARE_APP_ID_MAP = ['myelectrolux-sprint' : 'cf116a138086435dbc04f1678b50cc6d',
                                        'myelectrolux-staging': '3e1788b2e0c64d47ad85e37cbfb40918',
@@ -23,16 +23,16 @@ def getBuildVersion() {
         }
     }
 
-//    def BUILD_LIST = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json | jq -r '[.app_versions[:5][].shortversion] | join(\", \")'"].execute().text
-    def cmd = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/3e1788b2e0c64d47ad85e37cbfb40918/app_versions.json"]
-    def cmdJsonTextOutput = cmd.execute().text
+    def cmd = ['bash', '-c', "curl -H 'X-HockeyAppToken:${ACCESS_TOKEN_HOCYEKAPP_API_ALL_APPS}' https://rink.hockeyapp.net/api/2/apps/${HOCKEYAPP_APP_ID}/app_versions.json"]
+    def appVersionsJson = cmd.execute().text
     JsonSlurper jsonSlurper = new JsonSlurper()
-    Object result = jsonSlurper.parseText(cmdJsonTextOutput)
+    Object result = jsonSlurper.parseText(appVersionsJson)
     def shortBuildVersions = new ArrayList()
     result.app_versions.each { app ->
         shortBuildVersions.add(app.shortversion)
     }
-    return shortBuildVersions.join('\n')
+    def firstTenBuildVersions = shortBuildVersions.subList(0,9)
+    return firstTenBuildVersionshockeyappHelper.join('\n')
 }
 
 
