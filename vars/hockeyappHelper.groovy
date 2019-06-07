@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 import groovy.json.JsonSlurper
 
-def getAndroidBuildVersion(def appEnvironemnt, def project, def brand) {
+def getAndroidBuildVersion(def appEnvironment, def project, def brand) {
 
     final HOCKEYAPP_STAGING_CARE_APP_ID_MAP = ['myElectrolux'       : 'cf116a138086435dbc04f1678b50cc6d',
                                                'myElectrolux-sprint': '3e1788b2e0c64d47ad85e37cbfb40918',
