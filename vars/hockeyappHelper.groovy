@@ -44,7 +44,7 @@ def getAndroidBuildVersion(def appEnvironment, def project, def brand) {
         shortBuildVersions.add(app.shortversion)
     }
     def firstTenBuildVersions = shortBuildVersions.subList(0, 9)
-    return firstTenBuildVersionshockeyappHelper.join('\n')
+    return firstTenBuildVersions.join('\n')
 }
 
 
