@@ -30,7 +30,7 @@ def getAndroidBuildsShortVersion(def appEnvironment, def project, def brand) {
     } else if (appEnvironment == "preProduction") {
         if (project == "care") {
             if (brand == "myElectrolux") {
-                HOCKEYAPP_APP_ID = HOCKEYAPP_PREPRODUCTION_CARE_APP_ID_MAP.get("myElectrolux-staging")
+                HOCKEYAPP_APP_ID = HOCKEYAPP_PREPRODUCTION_CARE_APP_ID_MAP.get("myElectrolux")
             }
         }
     }
