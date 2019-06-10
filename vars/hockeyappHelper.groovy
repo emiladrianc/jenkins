@@ -86,7 +86,7 @@ def getShortVersionListFromHockeyApp(def appId) {
     result.app_versions.each { app ->
         shortBuildVersions.add(app.shortversion)
     }
-    def firstTenBuildVersions = shortBuildVersions.subList(0, 9).join('\n')
+    def firstTenBuildVersions = shortBuildVersions.subList(0, 4).join('\n')
     return firstTenBuildVersions
 }
 
