@@ -3,8 +3,8 @@ import groovy.json.JsonSlurper
 
 def getAndroidBuildsShortVersion(def appEnvironment, def project, def brand) {
 
-    final HOCKEYAPP_STAGING_CARE_APP_ID_MAP = ['myElectrolux'       : 'cf116a138086435dbc04f1678b50cc6d',
-                                               'myElectrolux-sprint': '3e1788b2e0c64d47ad85e37cbfb40918',
+    final HOCKEYAPP_STAGING_CARE_APP_ID_MAP = ['myElectrolux'       : '3e1788b2e0c64d47ad85e37cbfb40918',
+                                               'myElectrolux-sprint': 'cf116a138086435dbc04f1678b50cc6d',
                                                'myAEG'              : '8c16928284044b15a50916831d69d66e']
 
     final HOCKEYAPP_STAGING_KITCHEN_APP_ID_MAP = ['myElectrolux': 'ffe463f1bf804d1c9ce09efbe75909b2']
